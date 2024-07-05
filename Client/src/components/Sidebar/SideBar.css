@@ -12,11 +12,12 @@ body {
   background: #e3f2fd;
 }
 nav {
+  border-radius: 5px;
   position: fixed;
   top: 0;
   left: 0;
   height: 70px;
-  width: 100%;
+  width: 75px;
   display: flex;
   align-items: center;
   background: #fff;
@@ -82,6 +83,7 @@ nav.open .sidebar {
   font-size: 16px;
   color: #707070;
   font-weight: 400;
+  text-decoration: none;
 }
 .lists .nav-link:hover .icon,
 .lists .nav-link:hover .link {

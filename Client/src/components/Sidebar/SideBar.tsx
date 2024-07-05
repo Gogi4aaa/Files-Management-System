@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./SideBar.css";
+import { Link } from "react-router-dom";
 export default function SideBar() {
   const [isClicked, setIsClicked] = useState(false);
   const handleIconClick = () => {
@@ -7,11 +8,10 @@ export default function SideBar() {
     console.log(1);
   }
   return (
-    <>
       <html lang="en">
         <head>
           <meta charSet="UTF-8" />
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>Sidebar Menu | Side Navigation Bar</title>
           <link
@@ -23,7 +23,7 @@ export default function SideBar() {
           <nav className={isClicked ? "open" : ""}>
             <div className="logo">
               <i className="bx bx-menu menu-icon" onClick={handleIconClick}></i>
-              <span className="logo-name">Files Manager</span>
+              <span className="logo-name"></span>
             </div>
 
             <div className="sidebar">
@@ -37,7 +37,7 @@ export default function SideBar() {
                   <li className="list">
                     <a href="#" className="nav-link">
                       <i className="bx bx-home-alt icon"></i>
-                      <span className="link">Dashboard</span>
+                      <Link to="/dashboard" className="link">Dashboard</Link>
                     </a>
                   </li>
                   <li className="list">
@@ -76,6 +76,12 @@ export default function SideBar() {
                       <span className="link">Files</span>
                     </a>
                   </li>
+                  <li className="list">
+                    <a href="#" className="nav-link">
+                      <i className="bx bx-folder-open icon"></i>
+                      <Link to="/login-register" className="link">Login</Link>
+                    </a>
+                  </li>
                 </ul>
 
                 <div className="bottom-cotent">
@@ -99,7 +105,5 @@ export default function SideBar() {
           <section className="overlay" onClick={handleIconClick} ></section>
         </body>
       </html>
-
-    </>
   );
 };
