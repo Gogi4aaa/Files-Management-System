@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Dashboard from './components/Pages/Dashboard/Dashboard.tsx'
-import LoginRegister from './components/Pages/Dashboard/LoginRegister/LoginRegister.tsx'
+import Dashboard from './Pages/Dashboard/Dashboard.tsx'
+import LoginRegister from './Pages/LoginRegister/LoginRegister.tsx'
 
 const router = createBrowserRouter([
   {

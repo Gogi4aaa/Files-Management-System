@@ -35,10 +35,10 @@ export default function SideBar() {
               <div className="sidebar-content">
                 <ul className="lists">
                   <li className="list">
-                    <a href="#" className="nav-link">
+                    <Link to="/dashboard" className="nav-link">
                       <i className="bx bx-home-alt icon"></i>
-                      <Link to="/dashboard" className="link">Dashboard</Link>
-                    </a>
+                      <span className="link">Dashboard</span>
+                    </Link>
                   </li>
                   <li className="list">
                     <a href="#" className="nav-link">
@@ -77,10 +77,10 @@ export default function SideBar() {
                     </a>
                   </li>
                   <li className="list">
-                    <a href="#" className="nav-link">
+                    <Link to="/login-register" className="nav-link">
                       <i className="bx bx-folder-open icon"></i>
-                      <Link to="/login-register" className="link">Login</Link>
-                    </a>
+                      <span className="link">Login</span>
+                    </Link>
                   </li>
                 </ul>
 
