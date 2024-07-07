@@ -1,11 +1,12 @@
-import { useState } from "react";
 import "./SideBar.css";
 import { Link } from "react-router-dom";
-export default function SideBar() {
-  const [isClicked, setIsClicked] = useState(false);
+interface SideBarProps{
+  showMenu : boolean,
+  setShowMenu(showMenu: boolean): any,
+}
+export default function SideBar({showMenu, setShowMenu}: SideBarProps) {
   const handleIconClick = () => {
-    setIsClicked(!isClicked)
-    console.log(1);
+    setShowMenu(!showMenu)
   }
   return (
       <html lang="en">
@@ -20,7 +21,7 @@ export default function SideBar() {
           />
         </head>
         <body>
-          <nav className={isClicked ? "open" : ""}>
+          <nav className={showMenu ? "open" : ""}>
             <div className="logo">
               <i className="bx bx-menu menu-icon" onClick={handleIconClick}></i>
               <span className="logo-name"></span>
@@ -71,10 +72,10 @@ export default function SideBar() {
                     </a>
                   </li>
                   <li className="list">
-                    <a href="#" className="nav-link">
+                    <Link to="/files" className="nav-link">
                       <i className="bx bx-folder-open icon"></i>
                       <span className="link">Files</span>
-                    </a>
+                    </Link>
                   </li>
                   <li className="list">
                     <Link to="/login-register" className="nav-link">

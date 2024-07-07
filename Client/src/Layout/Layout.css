@@ -1,0 +1,12 @@
+.main-container{
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+.sidebar-open{
+    width: 22%;
+    transition: all 0.6s ease;
+}
+.sidebar-close{
+    width: 7%;
+}
