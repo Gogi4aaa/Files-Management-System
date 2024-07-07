@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import Layout from "../../Layout/Layout";
-const SERVER_URL = "https://localhost:7129";//I have to change it
+const SERVER_URL = "https://localhost:7220";//I have to change it
 function LoginRegister() {
 	const [loginValues, setLoginValues] = useState({ username: '', password: '' });
 	const [registerValues, setRegisterValues] = useState({ firstName: '', lastName: '', username: '', email: '', password: '' })
@@ -39,6 +39,7 @@ function LoginRegister() {
 			})
 			.catch(error => {
 				//notify user that something get wrong
+				console.log(error);
 				toast.error("Unexpected error occurred!")
 			})
 	}
@@ -60,6 +61,7 @@ function LoginRegister() {
 			})
 			.catch(error => {
 				//notify user that something get wrong
+				console.log(error);
 				toast.error("Unexpected error occurred!")
 			})
 	}

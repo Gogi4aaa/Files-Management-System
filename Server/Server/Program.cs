@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Sever.Data;
-
+using Server.Services.Data.Interfaces;
+using Server.Services.Data;
+using Server.Web.Infrastructure.Extensions;
 var myCors = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,12 @@ builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FilesSystemDbContext>(options =>
 	options.UseSqlServer(connectionString));
+
+//SERVICES
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddTransient<ICryptographyService, CryptographyService>();
+//END SERVICES
 builder.Services.AddSwaggerGen(options =>
 {
 	//Set up swagger authorize button
@@ -76,7 +84,7 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-	//app.SeedUser();
+	app.SeedUserRole();
 }
 app.UseRouting();
 
