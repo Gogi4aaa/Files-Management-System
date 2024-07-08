@@ -1,15 +1,15 @@
 ﻿namespace Server.Services.Data
 {
-	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Configuration;
-	using Server.Common;
-	using Server.Data.Models.ApiResponse;
-	using Server.Data.Models.Database;
-	using Server.Data.Models.Request;
-	using Server.Data.Models.Response;
-	using Server.Services.Data.Interfaces;
-	using Sever.Data;
-	public class UserService : IUserService
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Server.Common;
+    using Server.Data.Models.ApiResponse;
+    using Server.Data.Models.Database;
+    using Server.Data.Models.Request.User;
+    using Server.Data.Models.Response;
+    using Server.Services.Data.Interfaces;
+    using Sever.Data;
+    public class UserService : IUserService
 	{
 
 		private readonly FilesSystemDbContext dbContext;

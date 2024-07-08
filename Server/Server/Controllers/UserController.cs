@@ -1,14 +1,14 @@
 ﻿namespace Server.Controllers
 {
-	using Microsoft.AspNetCore.Authentication.JwtBearer;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-	using Server.Data.Models.ApiResponse;
-	using Server.Data.Models.Request;
-	using Server.Data.Models.Response;
-	using Server.Services.Data.Interfaces;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Server.Data.Models.ApiResponse;
+    using Server.Data.Models.Request.User;
+    using Server.Data.Models.Response;
+    using Server.Services.Data.Interfaces;
 
-	[Route("[controller]/[action]")]
+    [Route("[controller]/[action]")]
 	[ApiController]
 	public class UserController : ControllerBase
 	{

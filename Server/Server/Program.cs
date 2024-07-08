@@ -19,7 +19,9 @@ builder.Services.AddDbContext<FilesSystemDbContext>(options =>
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<ICryptographyService, CryptographyService>();
+builder.Services.AddTransient<IFolderService, FolderService>();
 //END SERVICES
+
 builder.Services.AddSwaggerGen(options =>
 {
 	//Set up swagger authorize button
