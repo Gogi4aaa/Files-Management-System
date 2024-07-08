@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sever.Data;
 
@@ -11,9 +12,10 @@ using Sever.Data;
 namespace Sever.Data.Migrations
 {
     [DbContext(typeof(FilesSystemDbContext))]
-    partial class FilesSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240708064409_AddFolderAndFileEntities")]
+    partial class AddFolderAndFileEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
