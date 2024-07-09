@@ -9,6 +9,7 @@ import Folder from "../../components/Sidebar/Folder/Folder";
 export default function Files() {
     const [isOpen, setIsOpen] = useState(false);
     const [folders, setFolders] = useState<Folders[]>([]);
+    const [currFolderId, setCurrFolderId] = useState<any>();
     const ref = useRef<HTMLInputElement>(null);
     var counter = 0;
     useEffect(() => {
@@ -36,33 +37,35 @@ export default function Files() {
                 console.log(err);
             })
     }
+    const handleFolderClick = (id: any) => {
+        setCurrFolderId(id);
+    }
     const handlePlusClick = () => {
         setIsOpen(!isOpen);
     }
     return (
         <Layout>
             <div>
-                {/* <button className="btn btn-primary" onClick={handlePlusClick}>+</button>
+                <button className="btn btn-primary" onClick={handlePlusClick}>+</button>
                 <div className={isOpen ? "d-block" : "d-none"}>
                     <input type="text" ref={ref} />
                     <button className="btn btn-success" onClick={handleCreateFolder}>Create</button>
                 </div>
-                {folders.map((folder, index) => (
-                    <Folder key={index} folder={folder} />
-      ))} */}
+
                 <div>
                     <ul>
-                        {folders?.map(f => (
-                             <li key={counter++} role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <p>{f.name}</p>
-                                <ul className="transform-0 dropdown-menu border-0 mb-3 position-relative">
-                                    <li><a className="dropdown-item" href="#">Action</a>
-                                        
-                                    </li>
-                                    <li><a className="dropdown-item" href="#">Another action</a></li>
-                                    <li><a className="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                            </li>
+                        {folders.map(f => (
+                            <>
+                                <li className="cursor-pointer" key={counter++} onClick={() => handleFolderClick(f.id)}> 
+                                    <p>{f.name}</p>
+                                    <ul className={`${currFolderId == f.id ? "d-block" : "d-none"} `}>
+                                        {/* subfolders */}
+                                        <li>Action</li>
+                                        <li>Test2</li>
+                                        <li>Test3</li>
+                                     </ul>
+                                </li>
+                             </>
                         )
                         )}
                     </ul>
