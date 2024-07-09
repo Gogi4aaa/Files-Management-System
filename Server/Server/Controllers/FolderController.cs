@@ -2,7 +2,9 @@
 {
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
+	using Server.Data.Models.ApiResponse;
 	using Server.Data.Models.Request.Folder;
+	using Server.Data.Models.Response;
 	using Server.Services.Data.Interfaces;
 
 	[Route("[controller]/[action]")]
@@ -16,18 +18,34 @@
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> CreateFolder(FolderCreateRequest request)
+		public async Task<IActionResult> CreateFolder(FolderCreateRequest request)
 		{
+			ApiResponseData<bool> isCreated;
 			try
 			{
-				var isCreated = await this.folderService.CreateFolder(request);
+				isCreated = await this.folderService.CreateFolder(request);
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				//notification message
+				return BadRequest(e.Message);
 			}
-			return Ok();
-			//return response
+			return Ok(isCreated);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetAllFolders()
+		{
+			ApiResponseData<AllFoldersResponse> folders;
+			try
+			{
+				folders = await this.folderService.GetAllFolders();
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+
+			return Ok(folders);
 		}
 	}
 }

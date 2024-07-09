@@ -1,12 +1,14 @@
 ﻿namespace Server.Services.Data
 {
 	using Microsoft.EntityFrameworkCore;
+	using Server.Data.Models.ApiResponse;
 	using Server.Data.Models.Database;
 	using Server.Data.Models.Request.Folder;
+	using Server.Data.Models.Response;
 	using Server.Services.Data.Interfaces;
 	using Sever.Data;
 	using System;
-
+	using Common;
 	public class FolderService : IFolderService
 	{
 		private readonly FilesSystemDbContext dbContext;
@@ -15,13 +17,13 @@
 			this.dbContext = dbContext;
 		}
 
-		public async Task<bool> CreateFolder(FolderCreateRequest request)
+		public async Task<ApiResponseData<bool>> CreateFolder(FolderCreateRequest request)
 		{
 			Folder isFolderExist = await this.GetFolderByName(request.Name);
 
 			if (isFolderExist != null)
 			{
-				return false;
+				return ApiResponseData<bool>.BadResponse(ValidationConstants.FolderExist, ValidationConstants.FolderAlreadyExist);
 				// should create folder with (1) but if folder with the same name and (1) exist, program should check until folder with the same name doesn't exist
 			}
 			Folder folder = new Folder()
@@ -33,7 +35,19 @@
 			await this.dbContext.Folders.AddAsync(folder);
 			await this.dbContext.SaveChangesAsync();
 
-			return true;
+			return ApiResponseData<bool>.CorrectResponse(true);
+		}
+
+		public async Task<ApiResponseData<AllFoldersResponse>> GetAllFolders()
+		{
+			var folders = await this.dbContext.Folders.ToListAsync();
+
+			var response = new AllFoldersResponse
+			{
+				Folders = folders
+			};
+
+			return ApiResponseData<AllFoldersResponse>.CorrectResponse(response);
 		}
 
 		public async Task<Folder> GetFolderByName(string folderName)

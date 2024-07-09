@@ -15,5 +15,9 @@
 		public const string PRICE = "Price";
 		public const string INVALID = "Invalid";
 		public const string NOT_CONNECTED = "NotConnected";
+
+		//Folder
+		public const string FolderAlreadyExist = "FolderAlreadyExist";
+		public const string FolderExist = "FolderExist";
 	}
 }

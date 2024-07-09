@@ -12,7 +12,9 @@ export default function Layout({ children }: LayoutProps) {
         <div className={showMenu ? "sidebar-open" : "sidebar-close"}>
             <SideBar showMenu={showMenu} setShowMenu={setShowMenu} />
         </div>
-        {children}
+        <div className="mt-3">
+          {children}
+        </div>
       </div>
     </>
   );
