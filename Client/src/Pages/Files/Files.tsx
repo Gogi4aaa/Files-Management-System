@@ -8,6 +8,7 @@ import { Folders } from "../../Interfaces/Types/Folders";
 
 import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 import 'react-contexify/ReactContexify.css';
+import Modal from "../../components/Modal/Modal";
 
 export default function Files() {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +17,7 @@ export default function Files() {
     const [subfolders, setSubfolders] = useState<Folders[]>([]);
     const ref = useRef<HTMLInputElement>(null);
     const { show } = useContextMenu();
-      
-  
-    var counter = 0;
+
     useEffect(() => {
         loadFiles();
     }, []);
@@ -72,7 +71,6 @@ export default function Files() {
         switch (id) {
           case "create":
             console.log(event, props)
-            createFolder();
             break;
           case "upload-file":
             console.log(event, props);
@@ -92,12 +90,12 @@ export default function Files() {
                     <ul>
                         {folders.map(f => (
                             <>
-                                <li className="cursor-pointer" key={counter++} onContextMenu={(e) => handleContextMenu(e, f.id)} onClick={() => handleFolderClick(f.id)}> 
+                                <li className="cursor-pointer" key={f.id} onContextMenu={(e) => handleContextMenu(e, f.id)} onClick={() => handleFolderClick(f.id)}> 
                                     <p>{f.name}</p>
                                     <Menu id={f.id}>
-                                        <Item id="create" onClick={handleItemClick}>New Folder</Item>
-                                        <Item id="upload-file" onClick={handleItemClick}>Upload File</Item>
-                                        <Item id="delete" onClick={handleItemClick}>Delete</Item>
+                                        <Item id="create" onClick={handleItemClick} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">New Folder</Item>
+                                        <Item id="upload-file" onClick={handleItemClick} >Upload File</Item>
+                                        <Item id="delete" onClick={handleItemClick} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete</Item>
                                         {/* <Item disabled>Disabled</Item>
                                         <Separator />
                                         <Submenu label="Foobar">
@@ -105,10 +103,11 @@ export default function Files() {
                                             <Item id="something" onClick={handleItemClick}>Do something else</Item>
                                         </Submenu> */}
                                     </Menu>
+                                    <Modal />
                                     <ul className={`${currFolderId == f.id ? "d-block" : "d-none"} `}>
-                                        {subfolders.map(sub => (
+                                        {/* {subfolders.map(sub => (
                                             <li key={sub.id}>{sub.name}</li>
-                                        ))}
+                                        ))} */}
                                      </ul>
                                 </li>
                              </>
