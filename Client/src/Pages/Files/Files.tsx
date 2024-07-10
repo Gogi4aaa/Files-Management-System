@@ -9,12 +9,17 @@ import { Folders } from "../../Interfaces/Types/Folders";
 import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 import 'react-contexify/ReactContexify.css';
 import Modal from "../../components/Modal/Modal";
+import { ModalProps } from "../../Interfaces/Types/Modal";
 
 export default function Files() {
     const [isOpen, setIsOpen] = useState(false);
     const [folders, setFolders] = useState<Folders[]>([]);
     const [currFolderId, setCurrFolderId] = useState<any>();
     const [subfolders, setSubfolders] = useState<Folders[]>([]);
+    const [menuId, setMenuId] = useState();
+    
+    const [menuPropsObj, setMenuPropsObj] = useState<ModalProps>({id: "", text: "", btnText: "", title: "", input: false, handleModalClick: () => {}})
+
     const ref = useRef<HTMLInputElement>(null);
     const { show } = useContextMenu();
 
@@ -32,11 +37,17 @@ export default function Files() {
                 console.log(err)
             })
     }
-    const createFolder = async () => {
-        var file = new CreateFile(ref.current?.value, ref.current?.value);
+    const createFolder = async (textValue: any = null) => {
+        var file;
+        if(textValue != null){
+            file = new CreateFile(textValue, textValue);
+        }
+        else{
+            file = new CreateFile(ref.current?.value, ref.current?.value);
+        }
+        
         await axios.post(`${API_URL}/Folder/CreateFolder`, file)
             .then(response => {
-                
                 loadFiles();
             })
             .catch(err => {
@@ -67,15 +78,51 @@ export default function Files() {
           }
         })
     }
-    const handleItemClick = ({ id, event, props }: any) => {
+    const handleItemClick = ({ id }: any) => {
         switch (id) {
-          case "create":
-            console.log(event, props)
-            break;
-          case "upload-file":
-            console.log(event, props);
-            break;
-          //etc...
+            case "create":
+                setMenuId(id);
+                setUpModalProps(id);
+                break;
+            case "upload-file":
+                setMenuId(id);
+                break;
+            case "delete":
+                setMenuId(id);
+                setUpModalProps(id);
+                break;
+            //etc...
+        }
+      }
+
+      const setUpModalProps = (menuId: any) => {
+        var text = "";
+        var btnText = "";
+        var title = "";
+        var input = false;
+        if(menuId == "create"){
+            text = "Create New Folder";
+            btnText = "New Folder";
+            title = "New Folder"
+            input = true
+        }
+        else if(menuId == "delete"){
+            text = "Delete File"
+            btnText = "Delete"
+            title = "Delete File"
+            input = false;
+        }
+        setMenuPropsObj(prev => {
+            return {...prev, id: menuId, text, btnText, title, input}
+        })
+      }
+      const handleModalClick = (id: any, textValue: string) => {
+        if(id == "create"){
+            
+            createFolder(textValue)
+        }
+        else if(id == "delete"){
+            // deleteFolder();
         }
       }
     return (
@@ -103,7 +150,7 @@ export default function Files() {
                                             <Item id="something" onClick={handleItemClick}>Do something else</Item>
                                         </Submenu> */}
                                     </Menu>
-                                    <Modal />
+                                    <Modal id={menuPropsObj.id} text={menuPropsObj.text} btnText={menuPropsObj.btnText} title={menuPropsObj.title} input={menuPropsObj.input} handleModalClick={handleModalClick}/>
                                     <ul className={`${currFolderId == f.id ? "d-block" : "d-none"} `}>
                                         {/* {subfolders.map(sub => (
                                             <li key={sub.id}>{sub.name}</li>
