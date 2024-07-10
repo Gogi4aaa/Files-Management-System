@@ -47,5 +47,21 @@
 
 			return Ok(folders);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetSubFolders(Guid id)
+		{
+			ApiResponseData<AllSubFoldersResponse> subfolders;
+			try
+			{
+				subfolders = await this.folderService.GetSubFolders(id);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+			
+			return Ok(subfolders);
+		}
 	}
 }

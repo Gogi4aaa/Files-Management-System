@@ -13,5 +13,7 @@
 		Task<Guid?> GetFolderIdByName(string folderName);
 
 		Task<ApiResponseData<AllFoldersResponse>> GetAllFolders();
+
+		Task<ApiResponseData<AllSubFoldersResponse>> GetSubFolders(Guid parentId);
 	}
 }

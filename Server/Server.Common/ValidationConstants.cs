@@ -19,5 +19,7 @@
 		//Folder
 		public const string FolderAlreadyExist = "FolderAlreadyExist";
 		public const string FolderExist = "FolderExist";
+		public const string NoSubfoldersExist = "Subfolders does not exist";
+		public const string NoSubfolders = "Subfolders that not exist!";
 	}
 }

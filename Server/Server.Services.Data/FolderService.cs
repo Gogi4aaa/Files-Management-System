@@ -72,5 +72,24 @@
 
 			return null;
 		}
+
+		public async Task<ApiResponseData<AllSubFoldersResponse>> GetSubFolders(Guid parentId)
+		{
+			List<Folder> folders = await this.dbContext
+				.Folders
+				.Where(x => x.ParentId == parentId)
+				.ToListAsync();
+
+			if(!folders.Any())
+			{
+				return ApiResponseData<AllSubFoldersResponse>.BadResponse(ValidationConstants.NoSubfoldersExist, ValidationConstants.NoSubfolders);
+			}
+			var response = new AllSubFoldersResponse
+			{
+				SubFolders = folders
+			};
+
+			return ApiResponseData<AllSubFoldersResponse>.CorrectResponse(response);
+		}
 	}
 }
