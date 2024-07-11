@@ -16,9 +16,6 @@
 
 		public Guid? ParentId { get; set; }
 
-		[ForeignKey(nameof(ParentId))]
-		public Folder ParentFolder { get; set; }
-
 		public string Name { get; set; } = null!;
 
 		public string PhysicalName { get; set; } = null!;

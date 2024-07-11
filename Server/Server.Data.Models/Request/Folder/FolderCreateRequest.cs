@@ -4,6 +4,6 @@
 	{
 		public string Name { get; set; } = null!;
 
-		public string? ParentFolderName { get; set; }//TODO: could be Parent Folder Id
+		public Guid? ParentId { get; set; }//TODO: could be Parent Folder Id
 	}
 }

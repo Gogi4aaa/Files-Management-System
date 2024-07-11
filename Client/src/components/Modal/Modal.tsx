@@ -1,6 +1,6 @@
 import { ModalProps } from "../../Interfaces/Types/Modal";
 import { useRef } from "react";
-export default function Modal({id, text, btnText, title, input, handleModalClick}: ModalProps) {
+export default function Modal({id, parentId, text, btnText, title, input, handleModalClick}: ModalProps) {
     const ref = useRef<HTMLInputElement>(null);
     return (
         <>
@@ -16,7 +16,7 @@ export default function Modal({id, text, btnText, title, input, handleModalClick
                             {input && <input type="text" ref={ref}/>}
                         </div>
                         <div className="modal-footer">
-                            <button onClick={() => handleModalClick(id, ref.current?.value)} className="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">{btnText}</button>
+                            <button onClick={() => handleModalClick(id, ref.current?.value, parentId)} className="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">{btnText}</button>
                         </div>
                     </div>
                 </div>

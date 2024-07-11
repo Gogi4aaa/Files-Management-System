@@ -1,9 +1,9 @@
 export default class CreateFile {
     name?: string;
-    parentFolderName?: string;
+    parentId?: string;
 
-    constructor(name?: string, parentFolderName?: string) {
+    constructor(name?: string, parentId?: any) {
         this.name = name;
-        this.parentFolderName = parentFolderName;
+        this.parentId = parentId;
   }
 } 

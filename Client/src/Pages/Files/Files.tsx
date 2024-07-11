@@ -18,7 +18,7 @@ export default function Files() {
     const [subfolders, setSubfolders] = useState<Folders[]>([]);
     const [menuId, setMenuId] = useState();
     
-    const [menuPropsObj, setMenuPropsObj] = useState<ModalProps>({id: "", text: "", btnText: "", title: "", input: false, handleModalClick: () => {}})
+    const [menuPropsObj, setMenuPropsObj] = useState<ModalProps>({id: "", parentId: "", text: "", btnText: "", title: "", input: false, handleModalClick: () => {}})
 
     const ref = useRef<HTMLInputElement>(null);
     const { show } = useContextMenu();
@@ -32,15 +32,18 @@ export default function Files() {
             .then(response => {
                 console.log(response);
                 setFolders(response.data.data.folders);
+                
             })
             .catch(err => {
                 console.log(err)
             })
     }
-    const createFolder = async (textValue: any = null) => {
+    const createFolder = async (textValue: any = null, parentId: any = null) => {
         var file;
         if(textValue != null){
-            file = new CreateFile(textValue, textValue);
+            file = new CreateFile(textValue, parentId);
+            console.log(file);
+            
         }
         else{
             file = new CreateFile(ref.current?.value, ref.current?.value);
@@ -57,8 +60,7 @@ export default function Files() {
     const loadSubFolders = async (parentId: any) => {
         await axios.get(`${API_URL}/Folder/GetSubFolders/?id=${parentId}`)
         .then(response => {
-            console.log(response.data);
-            setSubfolders(response.data)//check if I need more things here
+            setSubfolders(response.data.data?.subFolders)//check if I need more things here
         })
     }
     const handleFolderClick = (id: any) => {
@@ -78,24 +80,25 @@ export default function Files() {
           }
         })
     }
-    const handleItemClick = ({ id }: any) => {
+    const handleItemClick = (id :any, parentId: any) => {
         switch (id) {
             case "create":
+                console.log(parentId)
                 setMenuId(id);
-                setUpModalProps(id);
+                setUpModalProps(id, parentId);
                 break;
             case "upload-file":
                 setMenuId(id);
                 break;
             case "delete":
                 setMenuId(id);
-                setUpModalProps(id);
+                setUpModalProps(id, parentId);
                 break;
             //etc...
         }
       }
 
-      const setUpModalProps = (menuId: any) => {
+      const setUpModalProps = (menuId: any, parentId: any) => {
         var text = "";
         var btnText = "";
         var title = "";
@@ -103,23 +106,22 @@ export default function Files() {
         if(menuId == "create"){
             text = "Create New Folder";
             btnText = "New Folder";
-            title = "New Folder"
-            input = true
+            title = "New Folder";
+            input = true;
         }
         else if(menuId == "delete"){
-            text = "Delete File"
-            btnText = "Delete"
-            title = "Delete File"
+            text = "Delete File";
+            btnText = "Delete";
+            title = "Delete File";
             input = false;
         }
         setMenuPropsObj(prev => {
-            return {...prev, id: menuId, text, btnText, title, input}
+            return {...prev, id: menuId, parentId, text, btnText, title, input}
         })
       }
-      const handleModalClick = (id: any, textValue: string) => {
+      const handleModalClick = (id: any, textValue: string, parentId: any) => {
         if(id == "create"){
-            
-            createFolder(textValue)
+            createFolder(textValue, parentId)
         }
         else if(id == "delete"){
             // deleteFolder();
@@ -140,9 +142,9 @@ export default function Files() {
                                 <li className="cursor-pointer" key={f.id} onContextMenu={(e) => handleContextMenu(e, f.id)} onClick={() => handleFolderClick(f.id)}> 
                                     <p>{f.name}</p>
                                     <Menu id={f.id}>
-                                        <Item id="create" onClick={handleItemClick} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">New Folder</Item>
-                                        <Item id="upload-file" onClick={handleItemClick} >Upload File</Item>
-                                        <Item id="delete" onClick={handleItemClick} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete</Item>
+                                        <Item id="create" onClick={() => handleItemClick("create", f.id)} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">New Folder</Item>
+                                        <Item id="upload-file" onClick={() => handleItemClick("upload-file", f.id)} >Upload File</Item>
+                                        <Item id="delete" onClick={() => handleItemClick("delete", f.id)} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete</Item>
                                         {/* <Item disabled>Disabled</Item>
                                         <Separator />
                                         <Submenu label="Foobar">
@@ -150,17 +152,17 @@ export default function Files() {
                                             <Item id="something" onClick={handleItemClick}>Do something else</Item>
                                         </Submenu> */}
                                     </Menu>
-                                    <Modal id={menuPropsObj.id} text={menuPropsObj.text} btnText={menuPropsObj.btnText} title={menuPropsObj.title} input={menuPropsObj.input} handleModalClick={handleModalClick}/>
+                                    
                                     <ul className={`${currFolderId == f.id ? "d-block" : "d-none"} `}>
-                                        {/* {subfolders.map(sub => (
-                                            <li key={sub.id}>{sub.name}</li>
-                                        ))} */}
+                                        {subfolders?.length > 0 && subfolders?.map(sub => <li key={sub.id}>{sub.name}</li>)}
                                      </ul>
                                 </li>
+                                
                              </>
                         )
                         )}
                     </ul>
+                    <Modal id={menuPropsObj.id} parentId={menuPropsObj.parentId} text={menuPropsObj.text} btnText={menuPropsObj.btnText} title={menuPropsObj.title} input={menuPropsObj.input} handleModalClick={handleModalClick}/>
                 </div>
             </div>
         </Layout>

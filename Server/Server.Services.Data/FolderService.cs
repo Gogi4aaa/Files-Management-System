@@ -27,10 +27,10 @@
 				// should create folder with (1) but if folder with the same name and (1) exist, program should check until folder with the same name doesn't exist
 			}
 			Folder folder = new Folder()
-			{ 
+			{
 				Name = request.Name,
 				PhysicalName = request.Name,
-				ParentId = await this.GetFolderIdByName(request.Name),
+				ParentId = request.ParentId
 			};
 			await this.dbContext.Folders.AddAsync(folder);
 			await this.dbContext.SaveChangesAsync();
@@ -40,7 +40,7 @@
 
 		public async Task<ApiResponseData<AllFoldersResponse>> GetAllFolders()
 		{
-			var folders = await this.dbContext.Folders.ToListAsync();
+			var folders = await this.dbContext.Folders.Where(x => x.ParentId == null).ToListAsync();
 
 			var response = new AllFoldersResponse
 			{
