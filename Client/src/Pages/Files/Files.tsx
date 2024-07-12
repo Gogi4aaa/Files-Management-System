@@ -1,22 +1,23 @@
 import axios from "axios";
-import Layout from "../../Layout/Layout";
 import "./FIles.css";
-import CreateFile from "../../Models/Api/Files/CreateFile";
-import { useEffect, useRef, useState } from "react";
-import { API_URL } from "../../Constants/GeneralApplicationConstants";
-import { Folders } from "../../Interfaces/Types/Folders";
-
-import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
 import 'react-contexify/ReactContexify.css';
+
+import { API_URL } from "../../Constants/GeneralApplicationConstants";
+
+import { useEffect, useRef, useState } from "react";
+import { Menu, Item, Separator, Submenu, useContextMenu } from 'react-contexify';
+
+import CreateFile from "../../Models/Api/Files/CreateFile";
+import { Folder } from "../../Interfaces/Types/Folders";
+
+import Layout from "../../Layout/Layout";
 import Modal from "../../components/Modal/Modal";
 import { ModalProps } from "../../Interfaces/Types/Modal";
 
 export default function Files() {
     const [isOpen, setIsOpen] = useState(false);
-    const [folders, setFolders] = useState<Folders[]>([]);
-    const [currFolderId, setCurrFolderId] = useState<any>();
-    const [subfolders, setSubfolders] = useState<Folders[]>([]);
-    const [menuId, setMenuId] = useState();
+    const [folders, setFolders] = useState<Folder[]>([{name: "", folders: [], id: "", parentId: "", IsOpen: false }]);
+    const [currFolderId, setCurrFolderIds] = useState<string[]>([]);
     
     const [menuPropsObj, setMenuPropsObj] = useState<ModalProps>({id: "", parentId: "", text: "", btnText: "", title: "", input: false, handleModalClick: () => {}})
 
@@ -26,12 +27,12 @@ export default function Files() {
     useEffect(() => {
         loadFiles();
     }, []);
-
     const loadFiles = async () => {
         await axios.get(`${API_URL}/Folder/GetAllFolders`)
             .then(response => {
                 console.log(response);
                 setFolders(response.data.data.folders);
+                console.log(response.data.data.folders);
                 
             })
             .catch(err => {
@@ -58,13 +59,39 @@ export default function Files() {
             })
     }
     const loadSubFolders = async (parentId: any) => {
+
         await axios.get(`${API_URL}/Folder/GetSubFolders/?id=${parentId}`)
         .then(response => {
-            setSubfolders(response.data.data?.subFolders)//check if I need more things here
+        //   setFolders(f)
+            console.log(response.data.data?.subFolders);
+            
+            var folder: Folder = response.data.data?.subFolders
+            // var state = [...folders];
+            // state[0].subfolders.push(folder)
+            // console.log("State: ", state)
+            // setFolders([...state])
+            // console.log("Folders:", folders);
+            var folderNew = folders.map(x => {
+                if(x.id === parentId){
+                    console.log(x.id)
+                    return {
+                        ...x,
+                        folders: [...response.data.data?.subFolders]
+                    }
+                }
+                return x;
+            })
+            
+            setFolders(folderNew);
+            console.log(folderNew);//console.log(folders); 
         })
     }
     const handleFolderClick = (id: any) => {
-        setCurrFolderId(id);
+        console.log(id);
+        
+        if(!currFolderId.includes(id) && folders?.map(x => x.folders?.map(x => x.name))){
+            setCurrFolderIds(prev => ([...prev, id]));
+        }
         loadSubFolders(id);
     }
     const handlePlusClick = () => {
@@ -84,14 +111,11 @@ export default function Files() {
         switch (id) {
             case "create":
                 console.log(parentId)
-                setMenuId(id);
                 setUpModalProps(id, parentId);
                 break;
             case "upload-file":
-                setMenuId(id);
                 break;
             case "delete":
-                setMenuId(id);
                 setUpModalProps(id, parentId);
                 break;
             //etc...
@@ -137,10 +161,11 @@ export default function Files() {
                 </div>
                 <div>
                     <ul>
-                        {folders.map(f => (
-                            <>
-                                <li className="cursor-pointer" key={f.id} onContextMenu={(e) => handleContextMenu(e, f.id)} onClick={() => handleFolderClick(f.id)}> 
-                                    <p>{f.name}</p>
+                        {folders?.map(f => (
+                            // BOLLEAN FLAG
+                            <>     
+                                <li className="cursor-pointer" key={f.id}> 
+                                    <a onContextMenu={(e) => handleContextMenu(e, f.id)} onClick={() => handleFolderClick(f.id)}>{f.name}</a>
                                     <Menu id={f.id}>
                                         <Item id="create" onClick={() => handleItemClick("create", f.id)} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">New Folder</Item>
                                         <Item id="upload-file" onClick={() => handleItemClick("upload-file", f.id)} >Upload File</Item>
@@ -152,10 +177,25 @@ export default function Files() {
                                             <Item id="something" onClick={handleItemClick}>Do something else</Item>
                                         </Submenu> */}
                                     </Menu>
-                                    
-                                    <ul className={`${currFolderId == f.id ? "d-block" : "d-none"} `}>
-                                        {subfolders?.length > 0 && subfolders?.map(sub => <li key={sub.id}>{sub.name}</li>)}
-                                     </ul>
+                                    <ul className={`${currFolderId.some(x => x == f.id)  ? "d-block" : "d-none"} `}>
+                                        {f.folders?.map(sub => {
+                                             if(sub.parentId === f.id)
+                                                return <li className="ms-5" key={sub.id}>
+                                                    <a onContextMenu={(e) => handleContextMenu(e, sub.id)} onClick={() => handleFolderClick(sub.id)}>{sub.name}</a>
+                                                    <Menu id={sub.id}>
+                                                        <Item id="create" onClick={() => handleItemClick("create", sub.id)} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">New Folder</Item>
+                                                        <Item id="upload-file" onClick={() => handleItemClick("upload-file", sub.id)} >Upload File</Item>
+                                                        <Item id="delete" onClick={() => handleItemClick("delete", sub.id)} data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete</Item>
+                                                        {/* <Item disabled>Disabled</Item>
+                                                        <Separator />
+                                                        <Submenu label="Foobar">
+                                                            <Item id="reload" onClick={handleItemClick}>Reload</Item>
+                                                            <Item id="something" onClick={handleItemClick}>Do something else</Item>
+                                                        </Submenu> */}
+                                                    </Menu>
+                                                    </li>
+                                            })}
+                                    </ul>
                                 </li>
                                 
                              </>
