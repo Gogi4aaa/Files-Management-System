@@ -120,10 +120,10 @@ export default function Files() {
     return (
         <Layout>
             <div>
-                <button className="btn btn-primary" onClick={handlePlusClick}>+</button>
-                <div className={isOpen ? "d-block" : "d-none"}>
-                    <input className="border-1 border-black mr-3" type="text" ref={ref} />
-                    <button className="btn btn-success" onClick={createFolder}>Create</button>
+                <button className="btn btn-primary mb-3" onClick={handlePlusClick}>Create</button>
+                <div className={`${isOpen ? "d-flex" : "d-none"} add-container`}>
+                    <input className="border-1 border-black form-control input-height me-1" type="text" placeholder="Folder name..." ref={ref} />
+                    <button className="btn btn-success btn-add" onClick={createFolder}>+</button>
                 </div>
                 <FoldersList
                   folders={folders}

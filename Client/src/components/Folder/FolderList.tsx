@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Folder from './Folder'; // Adjust the import based on your file structure
 import { FoldersListProps } from '../../Interfaces/Props/Folder';
-
+import "./FolderList.css"
 
 const FoldersList =({
   folders,
@@ -19,7 +19,7 @@ const FoldersList =({
   };
 
   return (
-    <ul>
+    <ul className="folder-list">
       {folders?.map(folder => (
         <Folder
           key={folder.id}

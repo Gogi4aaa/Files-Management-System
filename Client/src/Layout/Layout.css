@@ -4,9 +4,10 @@
     width: 100%;
 }
 .sidebar-open{
-    width: 22%;
+    width: 30%;
     transition: all 0.6s ease;
 }
 .sidebar-close{
-    width: 7%;
+    width: 9%;
+    transition: all 0.4s ease-out;
 }

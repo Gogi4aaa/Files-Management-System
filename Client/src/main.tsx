@@ -5,7 +5,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Dashboard from './Pages/Dashboard/Dashboard.tsx'
 import LoginRegister from './Pages/LoginRegister/LoginRegister.tsx'
 import Files from './Pages/Files/Files.tsx'
-
 const router = createBrowserRouter([
   {
     path: "/",

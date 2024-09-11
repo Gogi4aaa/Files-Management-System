@@ -1,0 +1,46 @@
+/* Folder.css */
+.folder-item {
+    list-style: none;
+    padding: 5px 0;
+  }
+  
+  .folder-content {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .folder-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: lightcoral;
+  }
+  
+  .folder-icon.expanded {
+    color: yellowgreen;
+  }
+  
+  .folder-name {
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  
+  .folder-name:hover {
+    color: #007bff;
+  }
+  
+  .folder-menu {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .subfolder-list {
+    padding-left: 20px;
+    margin-top: 5px;
+  }
+  

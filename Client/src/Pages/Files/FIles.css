@@ -1,3 +1,17 @@
 .transform-0{
     transform: none!important;
 }
+.add-container{
+    margin: 0  0 0.75rem 0;
+}
+.btn-add{
+    width:30px;
+    height:30px;
+    text-align:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.input-height{
+    height:30px;
+}
