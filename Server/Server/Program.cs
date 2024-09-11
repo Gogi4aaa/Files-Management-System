@@ -7,6 +7,7 @@ using Sever.Data;
 using Server.Services.Data.Interfaces;
 using Server.Services.Data;
 using Server.Web.Infrastructure.Extensions;
+using System.Text.Json.Serialization;
 var myCors = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 

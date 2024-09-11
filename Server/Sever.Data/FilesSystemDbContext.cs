@@ -21,5 +21,13 @@
 		public DbSet<Folder> Folders { get; set; } = null!;
 
 		public DbSet<File> Files { get; set; } = null!;
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Folder>()
+				.HasMany(f => f.Folders)
+				.WithOne(f => f.Parent)
+				.HasForeignKey(f => f.ParentId);
+		}
 	}
 }

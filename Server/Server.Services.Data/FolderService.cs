@@ -9,6 +9,10 @@
 	using Sever.Data;
 	using System;
 	using Common;
+	using Microsoft.AspNetCore.Mvc;
+	using System.Text.Json.Serialization;
+	using System.Text.Json;
+
 	public class FolderService : IFolderService
 	{
 		private readonly FilesSystemDbContext dbContext;
@@ -40,14 +44,51 @@
 
 		public async Task<ApiResponseData<AllFoldersResponse>> GetAllFolders()
 		{
-			var folders = await this.dbContext.Folders.Where(x => x.ParentId == null).ToListAsync();
+			var topLevelFolders = await dbContext.Folders
+				.Where(f => f.ParentId == null) // Adjust the condition if needed
+				.ToListAsync();
 
+			// Convert to DTOs with recursive folder loading
+			var folderDtos = new List<FolderDto>();
+			foreach (var folder in topLevelFolders)
+			{
+				var folderDto = await LoadFolderWithSubfolders(folder.Id);
+				if (folderDto != null)
+					folderDtos.Add(folderDto);
+			}
 			var response = new AllFoldersResponse
 			{
-				Folders = folders
+				Folders = folderDtos
 			};
 
 			return ApiResponseData<AllFoldersResponse>.CorrectResponse(response);
+		}
+		private async Task<FolderDto> LoadFolderWithSubfolders(Guid folderId)
+		{
+			var folder = await dbContext.Folders
+				.Where(f => f.Id == folderId)
+				.Select(f => new FolderDto
+				{
+					Id = f.Id,
+					Name = f.Name,
+					PhysicalName = f.PhysicalName
+				}).SingleOrDefaultAsync();
+
+			if (folder == null)
+				return null;
+
+			var subfolders = await dbContext.Folders
+				.Where(f => f.ParentId == folderId)
+				.ToListAsync();
+
+			foreach (var subfolder in subfolders)
+			{
+				var subfolderDto = await LoadFolderWithSubfolders(subfolder.Id);
+				if (subfolderDto != null)
+					folder.Folders.Add(subfolderDto);
+			}
+
+			return folder;
 		}
 
 		public async Task<Folder> GetFolderByName(string folderName)

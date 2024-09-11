@@ -44,7 +44,6 @@
 			{
 				return BadRequest(e.Message);
 			}
-
 			return Ok(folders);
 		}
 

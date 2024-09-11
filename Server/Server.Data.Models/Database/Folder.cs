@@ -22,5 +22,7 @@
 
 		public ICollection<Folder> Folders { get; set; }
 		public ICollection<File> Files { get; set; }
+
+		public Folder? Parent { get; set; }
 	}
 }
